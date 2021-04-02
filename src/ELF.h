@@ -75,7 +75,9 @@ public:
         uint32_t p_align;
     };
 
-    std::vector<ELFProgramHeader *> programHeaders();
+    std::vector<ELFProgramHeader *> programHeaders() {
+        return m_pheaders;
+    }
 
     struct ELFSectionHeader {
         uint32_t sh_name;
@@ -90,12 +92,16 @@ public:
         uint32_t sh_entsize;
     };
 
-    std::vector<ELFSectionHeader *> sectionHeaders();
+    std::vector<ELFSectionHeader *> sectionHeaders() {
+        return m_sheaders;
+    }
 
 private:
     std::string m_path;
     uint8_t *m_contents;
     size_t m_size;
 
+    std::vector<ELFProgramHeader *> m_pheaders;
+    std::vector<ELFSectionHeader *> m_sheaders;
 };
 
