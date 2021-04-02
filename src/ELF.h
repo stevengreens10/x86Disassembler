@@ -22,17 +22,11 @@ public:
     }
 
     uint16_t read16(uint32_t offset) {
-        uint16_t val = *(((uint16_t *) m_contents) + offset);
-        return ((val & 0xFF00) >> 8) + ((val & 0xFF) << 8);
+        return *(((uint16_t *) m_contents) + offset);
     }
 
     uint32_t read32(uint32_t offset) {
-        uint32_t val = *(((uint32_t *) m_contents) + offset);
-        uint32_t endianVal = ((val & 0xFF000000) >> 24) |
-                             ((val & 0x00FF0000) >> 8) |
-                             ((val & 0x0000FF00) << 8) |
-                             ((val & 0x000000FF) << 24);
-        return endianVal;
+        return *(((uint32_t *) m_contents) + offset);;
     }
 
     struct ELFFileHeader {
