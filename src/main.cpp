@@ -15,8 +15,8 @@ int main(int argc, char *argv[]) {
     ELF elf{elfPath};
     elf.load();
 
-    auto programHeaders = *elf.programHeaders();
-    auto  sectionHeaders = *elf.sectionHeaders();
+    auto programHeaders = elf.programHeaders();
+    auto  sectionHeaders = elf.sectionHeaders();
     std::cout << "Program Headers:" << std::endl;
     for(auto & programHeader : programHeaders) {
         printf("ph_type=0x%08x, ph_ffset=0x%08x\n", programHeader->p_type, programHeader->p_offset);
@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
         printf("[%18s] sh_type=0x%08x, sh_offset=0x%08x\n", name.c_str(), sectionHeader->sh_type, sectionHeader->sh_offset);
     }
 
-    auto textSection = (*elf.sectionHeaders()).find(".text")->second;
+    auto textSection = elf.sectionHeaders().find(".text")->second;
     auto bytes = elf.read(textSection->sh_offset, textSection->sh_size);
 
     std::cout << "\nBytes at .text: ";

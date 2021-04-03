@@ -109,8 +109,8 @@ public:
         uint32_t p_align;
     };
 
-    std::vector<ProgramHeader *> *programHeaders() {
-        return m_pheaders;
+    std::vector<ProgramHeader *> &programHeaders() {
+        return *m_pheaders;
     }
 
     struct SectionHeader {
@@ -126,8 +126,8 @@ public:
         uint32_t sh_entsize;
     };
 
-    std::unordered_map<std::string, SectionHeader*> *sectionHeaders() {
-        return m_sheaders;
+    std::unordered_map<std::string, SectionHeader*> &sectionHeaders() {
+        return *m_sheaders;
     }
 
 private:
