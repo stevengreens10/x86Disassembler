@@ -2,6 +2,7 @@
 #include <vector>
 #include "Logger.h"
 #include "ELF.h"
+#include "Instruction.h"
 
 int main(int argc, char *argv[]) {
     Logger logger{std::cout};
@@ -34,6 +35,16 @@ int main(int argc, char *argv[]) {
         std::cout << "0x" << std::hex << ((int)bytes[i]) << " ";
     }
     std::cout << std::endl;
+
+    X86Instruction ins{};
+    ins.opcode = 0x89;
+    ins.mod = 0b11;
+    ins.mode = AddressingMode::REGISTER;
+    ins.reg = Instruction::idxFromRegister(Register::EDX);
+    ins.rm = Instruction::idxFromRegister(Register::ECX);
+    ins.instructionType = InstructionType::MOV_REG32_REG32;
+    ins.regDst32 = Register::ECX;
+    ins.regSrc32 = Register::EDX;
 
     return 0;
 }
