@@ -130,6 +130,10 @@ public:
         return *m_sheaders;
     }
 
+    uint8_t *contents() {
+        return m_contents;
+    }
+
 private:
     std::string m_path;
     uint8_t *m_contents;

@@ -3,6 +3,8 @@
 #include "Logger.h"
 #include "ELF.h"
 #include "Instruction.h"
+#include "InstructionStream.h"
+#include "Disassembler.h"
 
 int main(int argc, char *argv[]) {
     Logger logger{std::cout};
@@ -28,23 +30,19 @@ int main(int argc, char *argv[]) {
     }
 
     auto textSection = elf.sectionHeaders().find(".text")->second;
-    auto bytes = elf.read(textSection->sh_offset, textSection->sh_size);
 
-    std::cout << "\nBytes at .text: ";
-    for(int i = 0; i < textSection->sh_size; i++) {
-        std::cout << "0x" << std::hex << ((int)bytes[i]) << " ";
+    InstructionStream instructionStream{elf.contents() + textSection->sh_offset, static_cast<int>(textSection->sh_size)};
+
+    std::cout << "--Disassembly--" << std::endl;
+
+    while(!instructionStream.finished()) {
+        auto instruction = instructionStream.next();
+        if(instruction.instructionType == InstructionType::REG_REG) {
+            std::cout << Disassembler::mnemonicToString(instruction.mnemonic) << " "
+                      << Disassembler::registerToString(instruction.regDst) << ", "
+                      << Disassembler::registerToString(instruction.regSrc) << std::endl;
+        }
     }
-    std::cout << std::endl;
-
-    X86Instruction ins{};
-    ins.opcode = 0x89;
-    ins.mod = 0b11;
-    ins.mode = AddressingMode::REGISTER;
-    ins.reg = Instruction::idxFromRegister(Register::EDX);
-    ins.rm = Instruction::idxFromRegister(Register::ECX);
-    ins.instructionType = InstructionType::MOV_REG32_REG32;
-    ins.regDst32 = Register::ECX;
-    ins.regSrc32 = Register::EDX;
 
     return 0;
 }
